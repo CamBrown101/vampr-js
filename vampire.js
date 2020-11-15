@@ -92,17 +92,54 @@ class Vampire {
   // * when comparing Ansel and Andrew, Ansel is the closest common anscestor.
 
   closestCommonAncestor(vampire) {
-    //   const thisAncestors = [];
-    //   const vampireAncestors = [];
+    const vampireAncestors = [];
+    const thisAncestors = [];
+    let closestAncestor
 
-    //   if (!this.creator) {
-    //     return this
-    //   }
+    //Creates function to create an array of each Vampires creators
+    const createAncestors = (node, results) => {
+      if (node.creator) {
+        results.push(node.creator)
+        createAncestors(node.creator, results)
+      }
+      results.push(node)
+    }
+    // calls to create both creator lists.
+    createAncestors(this, thisAncestors);
+    createAncestors(vampire, vampireAncestors);
 
-    // }
+    //compare both lists and find the first instance where they match
+    thisAncestors.forEach((element) => {
+      if (vampireAncestors.includes(element)) {
+        closestAncestor = element;
+        return closestAncestor;
+      }
+    })
+    return closestAncestor
   }
 }
 
 
+let rootVampire = new Vampire("root");
+const offspring2 = new Vampire("b");
+const offspring1 = new Vampire("a");
+const offspring3 = new Vampire("c");
+const offspring4 = new Vampire("d");
+const offspring5 = new Vampire("e");
+const offspring6 = new Vampire("f");
+const offspring7 = new Vampire("g");
+const offspring8 = new Vampire("h");
+
+rootVampire.addOffspring(offspring1);
+rootVampire.addOffspring(offspring2);
+rootVampire.addOffspring(offspring3);
+offspring3.addOffspring(offspring4);
+offspring3.addOffspring(offspring5);
+offspring5.addOffspring(offspring6);
+offspring6.addOffspring(offspring7);
+offspring2.addOffspring(offspring8);
+
+//should be root Vampire
+console.log(offspring1.closestCommonAncestor(offspring2));
 module.exports = Vampire;
 
